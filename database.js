@@ -15,7 +15,7 @@ const dbConn = mysql.createConnection({
     database: 'student_database',
     port: 3306  // <== ใส่ port ให้ถูกต้อง (default 3306, MAMP ใช้ 8889)
 });
-
+// สร้าง student.html เพื่อจัดการ route /students ใน database.js ส่งโดยไฟล์ student.html, database.js 
 app.get("/homework", (req, res) => {
     res.sendFile(__dirname + '/student.html');
  });
@@ -23,7 +23,7 @@ app.get("/homework", (req, res) => {
 //  GET students
 app.get('/students', async (req,res) => {
     const connection = await dbConn
-    const rows = await connection.query('SELECT * from students')
+    const [rows] = await connection.query('SELECT * from students')
     res.send(rows)
 })
 
@@ -63,7 +63,8 @@ app.post("/students", async (req, res) => {
 
     const connection = await dbConn
     const rows = await connection.query("insert into students (name,age,phone,email) values('"+name+"','"+age+"',"+phone+",'"+email+"')")
-    res.send("คุณได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว");
+    res.status(201).send("คุณได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว")
+    // res.send("คุณได้ทำการเพิ่มข้อมูลเรียบร้อยแล้ว");
 })
 
 // PUT
